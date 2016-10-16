@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView temperaturelabel;
     private SensorManager mSensorManager;
     private Sensor mTemperature;
-    private final static String NOT_SUPPORTED_MESSAGE = "Sorry, sensor not available for this device.";
+    private final static String NOT_SUPPORTED_MESSAGE = "Sorry, Ambient Temperature sensor not available for this device.";
 
     static {
         System.loadLibrary("native-lib");
