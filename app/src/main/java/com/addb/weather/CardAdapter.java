@@ -32,9 +32,21 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
 
         TextView day = (TextView)holder.view.findViewById(R.id.day);
         TextView temperature = (TextView)holder.view.findViewById(R.id.temperature);
-
+        //TextView scale = (TextView)holder.view.findViewById(R.id.scale);
+        String scale="";
         day.setText(data.get(position).getDay());
-        temperature.setText(data.get(position).getTemperature());
+        String tempvalue= data.get(position).getTemperature();
+        int indexOfDecimal = tempvalue.indexOf('.');
+        if(indexOfDecimal!=-1)
+        tempvalue = tempvalue.substring(0, indexOfDecimal);
+
+        if(data.get(position).getScale().equals("C")){
+            scale =context.getResources().getString(R.string.celsius);
+        }
+        else if(data.get(position).getScale().equals("F")){
+            scale= context.getResources().getString(R.string.farenheit);
+        }
+        temperature.setText(tempvalue+scale);
         //if(data.get(position).getScale() == "c")
 
 
@@ -60,5 +72,9 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
     // Provide a suitable constructor (depends on the kind of dataset)
     public CardAdapter(ArrayList<CardContent> data) {
         this.data = data;
+    }
+
+    public ArrayList<CardContent> getData(){
+        return data;
     }
 }
