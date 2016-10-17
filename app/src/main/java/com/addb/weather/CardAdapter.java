@@ -44,7 +44,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
             scale =context.getResources().getString(R.string.celsius);
         }
         else if(data.get(position).getScale().equals("F")){
-            scale= context.getResources().getString(R.string.farenheit);
+            scale= context.getResources().getString(R.string.fahrenheit);
         }
         temperature.setText(tempvalue+scale);
         //if(data.get(position).getScale() == "c")
@@ -74,7 +74,5 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
         this.data = data;
     }
 
-    public ArrayList<CardContent> getData(){
-        return data;
-    }
+
 }

@@ -13,8 +13,6 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -27,10 +25,10 @@ public class MainActivity extends AppCompatActivity {
     private TextView temperaturelabel;
     private SensorManager mSensorManager;
     private Sensor mTemperature;
-    private final static String NOT_SUPPORTED_MESSAGE = "Sorry, Ambient Temperature sensor not available for this device.";
+    private final static String NOT_SUPPORTED_MESSAGE = "Sorry, Ambient Temperature sensor not available for this device!";
 
     static {
-        System.loadLibrary("native-lib");
+        System.loadLibrary("native-lib"); // to load our c++ code by referring to CMakeList
     }
 
     @Override
@@ -39,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mRecyclerView = (RecyclerView) findViewById(R.id.cardrecycle);
 
+        // list of 5 elements with day, temperature and scale(Celsius: C / Farenhiet : F)
         CardContent c1=new CardContent("Monday","25","C");
         CardContent c2=new CardContent("Tuesday","26","C");
         CardContent c3=new CardContent("Wednesday","27","C");
@@ -68,32 +67,37 @@ public class MainActivity extends AppCompatActivity {
         if (mTemperature == null) {
             temperaturelabel.setText(NOT_SUPPORTED_MESSAGE);
         }
-        System.out.println(hello());
-        //System.out.println(changeScale(4)+" -----------");
+        //System.out.println(hello()); testing JNI
     }
 
     public void setWeatherList(ArrayList<CardContent> list){
-
-
+        //update the list when some value changes i.e. scale for this sample
         mAdapter=new CardAdapter(list);
-        // fire the event
         mAdapter.notifyDataSetChanged();
         mRecyclerView.setAdapter(mAdapter);
     }
 
     public void changeTempScale(View view){
-        if(changeButton.getText().equals("To Farenheit")){
-            changeButton.setText("To Celsius");
+        String celsius = getResources().getString(R.string.celsiusbutton);
+        String fahrenheit = getResources().getString(R.string.fahrenheitbutton);
+
+        //change button text according to cuurent scale of temperature
+        if(changeButton.getText().equals(fahrenheit)){
+            changeButton.setText(celsius);
         }
-        else if(changeButton.getText().equals("To Celsius"))
-            changeButton.setText("To Farenheit");
+        else if(changeButton.getText().equals(celsius))
+            changeButton.setText(fahrenheit);
+
         ArrayList<CardContent> res = changeScale(cardContent);
-        for(CardContent c:res){
+        /*for(CardContent c:res){
             System.out.println(c.getDay()+" "+c.getTemperature()+" "+c.getScale());
         }
+        //this shows the actual float values for all the temperatures
+        */
         setWeatherList(res);
     }
     public void init(){
+        //initialize the ambient tempertaure sensor and start the listener
         mSensorManager.registerListener(_SensorEventListener, mTemperature, SensorManager.SENSOR_DELAY_NORMAL);
     }
     @Override
@@ -106,7 +110,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         mSensorManager.unregisterListener(_SensorEventListener);
+        // release the sensor listener on exit from the app
     }
+
+    //sensor event listener to continuously listen to the changes is temperature recorded by the sensor
     SensorEventListener _SensorEventListener=   new SensorEventListener() {
         @Override
         public void onSensorChanged(SensorEvent event) {
@@ -122,26 +129,49 @@ public class MainActivity extends AppCompatActivity {
     };
 
     public ArrayList<CardContent> changeScale(ArrayList<CardContent> list){
-        ArrayList<CardContent> result = new ArrayList<CardContent>();
+
+        String scale = "";
+        float tempList[]= new float[list.size()], res[];
+        int i=0;
+
         for(CardContent c:list){
-            if(c.getScale().equals("C")){
-                float far=changeToFarenheit(Float.parseFloat(c.getTemperature()));
-                c.setScale("F");
-                c.setTemperature(Float.toString(far));
+
+            if(c.getScale().equals("C")){ // C -> celsius
+                c.setScale("F"); // List is currently in Celsius and we want to change it to Fahrenheit, we change the scale here itself
+                if(scale.isEmpty())
+                    scale=c.getScale();
+                tempList[i]=Float.parseFloat(c.getTemperature());
             }
-            else if(c.getScale().equals("F")){
-                float cel=changeToCelsius(Float.parseFloat(c.getTemperature()));
+            else if(c.getScale().equals("F")){ // F -> fahrenheit
                 c.setScale("C");
-                c.setTemperature(Float.toString(cel));
+                if(scale.isEmpty())
+                    scale=c.getScale();
+                tempList[i]=Float.parseFloat(c.getTemperature());
             }
-            result.add(c);
+            i++;
+        }
+        if(scale.equals("F"))
+            res = convertToFahrenheit(tempList);
+        else
+            res = convertToCelsius(tempList);
+
+        int reslen = res.length;
+
+        for(int j=0; j<reslen; j++){
+            list.get(j).setTemperature(Float.toString(res[j])); // set the temperture for the particular day and order of the elements is fixed
         }
 
-        return result;
+        return list;
     }
 
+
+    public native float[] convertToFahrenheit(float[] f);
+    public native float[] convertToCelsius(float[] f);
+
+    /*
+    //initial functions, trying out JNI and calling changeToFahrenheit and celsius on single value
     public  native String hello();
-    public native float changeToFarenheit(float n);
-    public native float changeToCelsius(float n);
+    public native float changeToFahrenheit(float n);
+    public native float changeToCelsius(float n);*/
 
 }

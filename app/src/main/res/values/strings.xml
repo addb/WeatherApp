@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">Weather</string>
     <string name="celsius">&#176;C</string>
-    <string name="farenheit">&#176;F</string>
+    <string name="fahrenheit">&#176;F</string>
     <string name="degree">&#176;</string>
+    <string name="celsiusbutton">TO &#176;C</string>
+    <string name="fahrenheitbutton">TO &#176;F</string>
+
 </resources>
