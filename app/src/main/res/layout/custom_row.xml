@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-suto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    card_view:cardCornerRadius="5dp"
+    android:layout_marginTop="12dp"
+    android:layout_marginRight="12dp"
+    android:layout_marginLeft="12dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="75dp"
+                android:padding="2dp"
+                android:layout_marginLeft="20dp"
+                android:textSize="40dp"
+                android:text="Day"
+                android:id="@+id/day"
+                android:gravity="center_vertical"
+                android:layout_gravity="left|center_vertical" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="75dp"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:padding="2dp"
+                android:layout_marginRight="20dp"
+                android:textColor="#006699"
+                android:text="25"
+                android:id="@+id/temperature"
+                android:gravity="center_vertical"
+                android:layout_gravity="right|center_vertical"/>
+
+        </FrameLayout>
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:text="@string/fahrenheitbutton"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="bottom|end"
+        android:id="@+id/changebutton"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:onClick="changeTempScale"/>
+
+    <TextView
+        android:text="Ambient"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:gravity="center|center_vertical"
+        android:textSize="15dp"
+        android:id="@+id/ambient"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true" />
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        android:paddingTop="5dp"
+        android:id="@+id/cardrecycle"
+        android:layout_below="@+id/ambient"
+        android:layout_alignParentStart="true"
+        android:layout_above="@+id/changebutton">
+    </android.support.v7.widget.RecyclerView>
+
+</RelativeLayout>
